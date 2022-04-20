@@ -1,3 +1,5 @@
+# ToDo modify as this project does not need that wide variety of compilers etc..
+
 # [Choice] bionic (18.04), focal (20.04)
 ARG VARIANT="focal"
 FROM ubuntu:${VARIANT}
