@@ -10,22 +10,24 @@
 #include <internal_use_only/config.hpp>
 
 static constexpr auto USAGE =
-  R"(Naval Fate.
+  R"(Lox C++ Interpreter.
 
     Usage:
-          naval_fate ship new <name>...
-          naval_fate ship <name> move <x> <y> [--speed=<kn>]
-          naval_fate ship shoot <x> <y>
-          naval_fate mine (set|remove) <x> <y> [--moored | --drifting]
-          naval_fate (-h | --help)
-          naval_fate --version
+          cloxpp-interpreter [<script>]
+          cloxpp-interpreter (-h | --help)
+          cloxpp-interpreter --version
  Options:
           -h --help     Show this screen.
           --version     Show version.
-          --speed=<kn>  Speed in knots [default: 10].
-          --moored      Moored (anchored) mine.
-          --drifting    Drifting mine.
 )";
+
+namespace cloxpp {
+
+// ToDo implement as in 4.1
+void runPrompt() { spdlog::info("Running interpreter interactively"); }
+void runFile(std::string_view file) { spdlog::info("Interpreting {}", file); };
+
+}// namespace cloxpp
 
 int main(int argc, const char **argv)
 {
@@ -36,14 +38,16 @@ int main(int argc, const char **argv)
       fmt::format("{} {}",
         cloxpp::cmake::project_name,
         cloxpp::cmake::project_version));// version string, acquired from config.hpp via CMake
-
     for (auto const &arg : args) { std::cout << arg.first << "=" << arg.second << '\n'; }
+    const auto script = args["<script>"];
+    if (script.isString()) {
+      cloxpp::runFile(script.asString());
+    } else {
+      cloxpp::runPrompt();
+    }
 
+    spdlog::info("Parsed Arguments");
 
-    // Use the default logger (stdout, multi-threaded, colored)
-    spdlog::info("Hello, {}!", "World");
-
-    fmt::print("Hello, from {}\n", "{fmt}");
   } catch (const std::exception &e) {
     fmt::print("Unhandled exception in main: {}", e.what());
   }
