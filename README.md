@@ -4,13 +4,18 @@
 [![codecov](https://codecov.io/gh/LtdSauce/cloxpp/branch/main/graph/badge.svg)](https://codecov.io/gh/LtdSauce/cloxpp)
 [![CodeQL](https://github.com/LtdSauce/cloxpp/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/LtdSauce/cloxpp/actions/workflows/codeql-analysis.yml)
 
-LGTM Has to be set up manually after template is created:
-
-[![Language grade: C++](https://img.shields.io/lgtm/grade/cpp/github/LtdSauce/cloxpp)](https://lgtm.com/projects/g/LtdSauce/cloxpp/context:cpp)
-
 ## About cloxpp
 
+This is yet another implementation of the lox language written in C++. 
+This project is initially developed while working my way 
+through the [Crafting Interpreters](https://craftinginterpreters.com) book. And its name is not very imaginative.
 
+Because the project itself was bootstrapped from the [cpp_boilerplate_project](https://github.com/cpp-best-practices/cpp_boilerplate_project) 
+template there are maybe some leftovers that I did not clean up.
+
+## Current State Of Journey
+
+Currently, there is nothing implemented at all... 
 
 ## More Details
 
