@@ -28,6 +28,14 @@ FetchContent_Declare(_project_options
 FetchContent_MakeAvailable(_project_options)
 include(${_project_options_SOURCE_DIR}/Index.cmake)
 
+option(CLOXPP_USE_DOCKER_TOOLCHAIN "Put every cache in binary dir to enable clions docker toolchain" OFF)
+if (CLOXPP_USE_DOCKER_TOOLCHAIN)
+    message(STATUS "Using ${CMAKE_CURRENT_BINARY_DIR} as CONAN_USER_HOME")
+    set(ENV{CONAN_USER_HOME} ${CMAKE_BINARY_DIR})
+    message(STATUS "Using ${CMAKE_CURRENT_BINARY_DIR} as CCACHE_DIR")
+    set(ENV{CCACHE_DIR} ${CMAKE_BINARY_DIR})
+endif ()
+
 # uncomment to enable vcpkg:
 # # Setup vcpkg - should be called before defining project()
 # run_vcpkg()
