@@ -1,5 +1,6 @@
 #include <functional>
 #include <iostream>
+#include <fstream>
 
 #include <docopt/docopt.h>
 #include <spdlog/spdlog.h>
@@ -25,7 +26,22 @@ namespace cloxpp {
 
 // ToDo implement as in 4.1
 void runPrompt() { spdlog::info("Running interpreter interactively"); }
-void runFile(std::string_view file) { spdlog::info("Interpreting {}", file); };
+void run(std::string_view script);
+void runFile(std::string_view file) {
+  spdlog::info("Interpreting {}", file);
+  std::ifstream file_stream((std::string(file)));
+  if(file_stream.is_open()) {
+    run(std::string((std::istreambuf_iterator<char>(file_stream)), std::istreambuf_iterator<char>()));
+  } else {
+    spdlog::error("Could not open file");
+    std::terminate();
+  }
+
+
+}
+void run(std::string_view script){
+  spdlog::info("Read in file content:\n===================\n{}", script);
+}
 
 }// namespace cloxpp
 
