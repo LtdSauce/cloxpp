@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include <docopt/docopt.h>
+#include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/spdlog.h>
 
 // This file will be generated automatically when you run the CMake configuration step.
@@ -31,11 +32,11 @@ void runPrompt()
   spdlog::info("Running interpreter interactively");
   while (true) {
     std::string line;
-    std::cout << ">>> ";
-    if(!std::getline(std::cin, line)) { break; }
+    fmt::print(">>> ");
+    if (!std::getline(std::cin, line)) { break; }
     run(line);
   }
-  std::cout << std::endl;
+  fmt::print("/>>>");
 }
 void runFile(std::string_view file)
 {
@@ -54,6 +55,10 @@ void run(std::string_view script) { std::cout << script << std::endl; }
 
 int main(int argc, const char **argv)
 {
+  static constexpr auto log_file = "cloxpp.log";
+  auto file_logger = spdlog::basic_logger_mt("file_logger", log_file, true);// do not truncate!
+  spdlog::set_default_logger(file_logger);
+
   try {
     std::map<std::string, docopt::value> args = docopt::docopt(USAGE,
       { std::next(argv), std::next(argv, argc) },
@@ -61,7 +66,14 @@ int main(int argc, const char **argv)
       fmt::format("{} {}",
         cloxpp::cmake::project_name,
         cloxpp::cmake::project_version));// version string, acquired from config.hpp via CMake
-    for (auto const &arg : args) { std::cout << arg.first << "=" << arg.second << '\n'; }
+
+    fmt::print("Log file at: {}\n", log_file);
+
+    spdlog::info("Running with args: {}", [&args](std::stringstream sstream) {
+      for (auto const &arg : args) { sstream << arg.first << "=" << arg.second << '\n'; }
+      return sstream.str();
+    }({}));
+
     const auto script = args["<script>"];
     if (script.isString()) {
       cloxpp::runFile(script.asString());
