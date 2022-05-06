@@ -1,6 +1,6 @@
+#include <fstream>
 #include <functional>
 #include <iostream>
-#include <fstream>
 
 #include <docopt/docopt.h>
 #include <spdlog/spdlog.h>
@@ -24,24 +24,31 @@ static constexpr auto USAGE =
 
 namespace cloxpp {
 
-// ToDo implement as in 4.1
-void runPrompt() { spdlog::info("Running interpreter interactively"); }
 void run(std::string_view script);
-void runFile(std::string_view file) {
+
+void runPrompt()
+{
+  spdlog::info("Running interpreter interactively");
+  while (true) {
+    std::string line;
+    std::cout << ">>> ";
+    if(!std::getline(std::cin, line)) { break; }
+    run(line);
+  }
+  std::cout << std::endl;
+}
+void runFile(std::string_view file)
+{
   spdlog::info("Interpreting {}", file);
   std::ifstream file_stream((std::string(file)));
-  if(file_stream.is_open()) {
+  if (file_stream.is_open()) {
     run(std::string((std::istreambuf_iterator<char>(file_stream)), std::istreambuf_iterator<char>()));
   } else {
     spdlog::error("Could not open file");
     std::terminate();
   }
-
-
 }
-void run(std::string_view script){
-  spdlog::info("Read in file content:\n===================\n{}", script);
-}
+void run(std::string_view script) { std::cout << script << std::endl; }
 
 }// namespace cloxpp
 
